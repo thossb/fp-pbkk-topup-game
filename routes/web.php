@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\GameController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,18 +15,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+//automaticlly go to dashboard
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
+//dashboard
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+//profile controller
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+//game controller -belum ada blade
+Route::get('/games', [GameController::class, 'index'])->name('games.index');
+Route::get('/games/{id}', [GameController::class, 'show'])->name('games.show');
 
 require __DIR__.'/auth.php';
