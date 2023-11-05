@@ -21,9 +21,7 @@ Route::get('/', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 //dashboard
-Route::get('/dashboard', function () {
-    return view('dashboard-topup');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [GameController::class, 'map'])->middleware(['auth', 'verified'])->name('dashboard');
 
 //profile controller
 Route::middleware('auth')->group(function () {

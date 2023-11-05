@@ -68,12 +68,11 @@
         </section>
 
         <!-- Game Lists -->
-        <section class="mx-20">
+        <section class="mx-20 mb-4">
             <div class="grid grid-flow-row grid-cols-2 items-center gap-3">
-                <x-game-card></x-game-card>
-                <x-game-card></x-game-card>
-                <x-game-card></x-game-card>
-                <x-game-card></x-game-card>
+                @foreach ($games as $game)
+                    <x-game-card :game="$game" />
+                @endforeach
             </div>
         </section>
 

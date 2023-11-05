@@ -14,6 +14,13 @@ class GameController extends Controller
         return view('games.index', compact('games')); // belum ada view
     }
 
+    public function map()
+    {
+        $games = Game::all();
+
+        return view('dashboard-topup', compact('games'));
+    }
+
     public function show($id)
     {
         $game = Game::find($id); // Retrieve a specific game by ID.
