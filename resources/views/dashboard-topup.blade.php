@@ -1,7 +1,7 @@
 <x-app-layout>
     <div class="flex flex-col gap-10">
         <div class="mt-4 mx-20">
-            <x-bladewind.alert shade="dark" type="warning">
+            <x-bladewind.alert shade="dark" type="warning" show_close_icon="false">
                 Our website is still on-going development !
             </x-bladewind.alert>
         </div>
@@ -47,7 +47,7 @@
                 <div class="swiper-button-prev"></div>
                 <div class="swiper-pagination"></div>
               </div>
-              @push('scripts')
+            @push('scripts')
             <!-- Swiper JS -->
             <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
             <script>
@@ -69,7 +69,7 @@
 
         <!-- Game Lists -->
         <section class="mx-20 mb-4">
-            <div class="grid grid-flow-row grid-cols-2 items-center gap-3">
+            <div class="grid grid-flow-row grid-cols-2 items-center gap-5">
                 @foreach ($games as $game)
                     <x-game-card :game="$game" />
                 @endforeach

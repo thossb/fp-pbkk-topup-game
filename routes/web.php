@@ -16,9 +16,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 //automaticlly go to dashboard
-Route::get('/', function () {
-    return view('dashboard-topup');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/', [GameController::class, 'map'])->middleware(['auth', 'verified'])->name('dashboard');
 
 //dashboard
 Route::get('/dashboard', [GameController::class, 'map'])->middleware(['auth', 'verified'])->name('dashboard');
@@ -31,7 +29,7 @@ Route::middleware('auth')->group(function () {
 });
 
 //game controller -belum ada blade
-Route::get('/games', [GameController::class, 'index'])->name('games.index');
+// Route::get('/games', [GameController::class, 'index'])->name('games.index');
 Route::get('/games/{id}', [GameController::class, 'show'])->name('games.show');
 
 require __DIR__ . '/auth.php';

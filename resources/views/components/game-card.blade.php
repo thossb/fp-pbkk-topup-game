@@ -1,5 +1,5 @@
 @props(['game'])
-<x-bladewind.card reduce_padding="true" class="cursor-pointer hover:shadow-yellow-main hover:shadow-lg">
+<x-bladewind.card reduce_padding="true" class="cursor-pointer hover:scale-105 hover:transition hover:delay-100">
     <div class="flex items-center">
         <div>
             <x-bladewind.avatar size="big" image="felixe.png"/>
@@ -7,7 +7,7 @@
         <div class="grow pl-2 pt-1">
             <b class="text-lg">{{ $game->name }}</b>
             <div class="">
-                <x-bladewind.tag label="MOBA" color="red"/>
+                <x-bladewind.tag label="{{ $game->category }}" color="yellow"/>
             </div>
         </div>
         <div>
