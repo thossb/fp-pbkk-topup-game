@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('game', function (Blueprint $table) {
+        Schema::create('games', function (Blueprint $table) {
             $table->id();
             $table->string('name', 128);
             $table->string('description', 128)->nullable();
-            $table->decimal('price', 10, 2); // 10 total digits, 2 digits after the decimal point
             $table->string('category', 128);
+            $table->string('unit', 20);
             $table->timestamps();
         });
     }

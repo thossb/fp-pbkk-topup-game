@@ -1,5 +1,4 @@
-@props(['game'])
-
+@props(['game', 'denoms'])
 <x-app-layout>
     <div class="relative">
         <div class="absolute inset-0 opacity-30" style="background-image: url('/images/games/MLBBHeroImage.jpg'); background-size: cover;"></div>
@@ -21,16 +20,11 @@
                     </div>
 
                     <!-- Ini nanti ambil dari props game terus di map buat denom atau nominalnya -->
-                    <div class="grid grid-cols-4 gap-10 my-10 z-10">
-                        <x-denom-card></x-denom-card>
-                        <x-denom-card></x-denom-card>
-                        <x-denom-card></x-denom-card>
-                        <x-denom-card></x-denom-card>
-                        <x-denom-card></x-denom-card>
-                        <x-denom-card></x-denom-card>
-                        <x-denom-card></x-denom-card>
-                        <x-denom-card></x-denom-card>
-                    </div>
+                    <div class="{{ count($denoms) < 4 ? 'flex' : 'grid grid-cols-4' }} gap-10 my-10 z-10">
+                        @foreach ($denoms as $denom)
+                            <x-denom-card :denom="$denom" :game="$game"></x-denom-card>
+                        @endforeach
+                    </div>                    
 
                     <div class="w-48 z-10 my-10">
                         @php
@@ -51,7 +45,7 @@
                     </div>
 
                     <div class="z-10 mb-10">
-                        <x-bladewind.button color="yellow" radius="medium" size="medium">Submit</x-bladewind.button>
+                        <x-bladewind.button  color="yellow" radius="medium" size="medium">Submit</x-bladewind.button>
                     </div>
             </div>
         </div>

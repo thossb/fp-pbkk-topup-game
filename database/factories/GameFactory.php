@@ -2,7 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\Game;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 /**
@@ -20,10 +22,12 @@ class GameFactory extends Factory
     public function definition()
     {
         $nameExamples = [
-            '500 diamond mobile legend',
-            '1000 diamond mobile legend',
-            '1000 robux',
-            '500 robux',
+            'Mobile Legend',
+            'Valorant',
+            'Roblox',
+            'League of Legends',
+            'Ragnarok',
+            'PUBG Mobile',
         ];
 
         $descriptionExamples = [
@@ -33,19 +37,24 @@ class GameFactory extends Factory
             'sale diskon 15 persen',
         ];
 
-        $price = $this->faker->numberBetween(10000, 250000); // Random price between 10,000 and 150,000.
-
         $categoryExamples = [
             'moba',
             'fps',
             'role-play',
         ];
 
+        $unitExamples = [
+            'diamond',
+            'robux',
+            'coin',
+            'point',
+        ];
+
         return [
-            'name' => $this->faker->randomElement($nameExamples),
-            'description' => $this->faker->randomElement($descriptionExamples),
-            'price' => $price,
-            'category' => $this->faker->randomElement($categoryExamples),
+            'name' => Arr::random($nameExamples),
+            'description' => Arr::random($descriptionExamples),
+            'category' => Arr::random($categoryExamples),
+            'unit' => Arr::random($unitExamples),
         ];
     }
 }
