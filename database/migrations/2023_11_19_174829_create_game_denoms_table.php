@@ -11,19 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('transaction', function (Blueprint $table) {
+        Schema::create('game_denoms', function (Blueprint $table) {
             $table->id();
-            $table->string('description', 128)->nullable();
-            $table->string('payment_method', 128);
-            $table->string('payment_proof'); // Store the image file name
-            $table->timestamp('transaction_date');
-
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('user');
-
+            $table->string('denom', 20);
+            $table->integer('price');
             $table->unsignedBigInteger('game_id');
             $table->foreign('game_id')->references('id')->on('games');
-
             $table->timestamps();
         });
     }
@@ -33,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('transaction');
+        Schema::dropIfExists('game_denoms');
     }
 };

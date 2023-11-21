@@ -12,21 +12,17 @@ class Game extends Model
     protected $fillable = [
         'name',
         'description',
-        'price',
         'category',
-    ];
-
-    protected $table = 'game';
-    protected $primaryKey = 'id';
-    public $incrementing = true;
-    public $timestamps = true;
-
-    protected $casts = [
-        'price' => 'decimal:2', // To ensure the 'price' attribute is a decimal with 2 decimal places.
+        'unit',
     ];
 
     public function transaction()
     {
         return $this->hasMany(Transaction::class, 'game_id');
+    }
+
+    public function denom()
+    {
+        return $this->hasMany(GameDenom::class, 'game_id');
     }
 }
