@@ -23,6 +23,7 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => bcrypt('password123'), // Use bcrypt to hash the password.
             'remember_token' => Str::random(10),
+            'role_id' => 2,
         ];
     }
 

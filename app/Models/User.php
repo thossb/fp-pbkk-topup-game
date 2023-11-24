@@ -24,6 +24,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role_id', 
+        'profile_picture',       
     ];
 
     /**
@@ -55,6 +57,11 @@ class User extends Authenticatable
     public function paymenthistory()
     {
         return $this->hasMany(PaymentHistory::class, 'user_id');
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class, 'role_id');
     }
 
 }
