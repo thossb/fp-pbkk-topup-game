@@ -5,11 +5,13 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\GameDenomController;
 use Illuminate\Support\Facades\Route;
+
 require __DIR__ . '/auth.php';
 
 //profile controller
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profile-inbox', [ProfileController::class, 'inbox'])->name('profile.inbox');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });

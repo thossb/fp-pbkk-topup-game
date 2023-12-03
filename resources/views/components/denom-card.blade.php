@@ -12,7 +12,7 @@
             </div>
             <div>
                 <a href="#">
-                    <x-bladewind.button size="small" radius="medium" color="yellow">
+                    <x-bladewind.button size="small" radius="medium" color="yellow" onclick="addToCart(event, {{json_encode($denom)}}, {{json_encode($game)}})">
                         Add
                     </x-bladewind.button>
                 </a>

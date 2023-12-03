@@ -17,7 +17,7 @@ class GameController extends Controller
 
     public function map()
     {
-        $games = Game::all();
+        $games = Game::paginate(6);
 
         return view('dashboard-topup', compact('games'));
     }
@@ -29,7 +29,7 @@ class GameController extends Controller
 
         return view('games.show', compact('game', 'denoms')); //belum ada view
     }
-    
+
     /**
      * Add a new game.
      */

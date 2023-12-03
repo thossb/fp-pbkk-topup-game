@@ -74,6 +74,9 @@
                     <x-game-card :game="$game" />
                 @endforeach
             </div>
+            <div class="mt-10 bg-white p-4 rounded-md bg-opacity-60">
+              {{ $games->links() }}
+            </div>
         </section>
 
     </div>
