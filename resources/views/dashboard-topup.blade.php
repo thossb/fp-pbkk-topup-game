@@ -1,10 +1,21 @@
 <x-app-layout>
     <div class="flex flex-col gap-10">
-        <div class="mt-4 mx-20">
-            <x-bladewind.alert shade="dark" type="warning" show_close_icon="false">
-                Our website is still on-going development !
-            </x-bladewind.alert>
-        </div>
+      {{-- Flash Message Session --}}
+      @if (session('success'))
+          <div class="mx-20 mt-4 animate-out fade-out delay-300 disappear-animation">
+              <x-bladewind.alert shade="dark" type="success" show_close_icon="false">
+                  {{ session('success') }}
+              </x-bladewind.alert>
+          </div>
+      @else
+          <div class="mt-4 mx-20 animate-out fade-out delay-300 disappear-animation">
+              <x-bladewind.alert shade="dark" type="warning" show_close_icon="false">
+                  Our website is still on-going development!
+              </x-bladewind.alert>
+          </div>
+      @endif
+
+      
 
         <!-- Sliders -->
         <section class="">

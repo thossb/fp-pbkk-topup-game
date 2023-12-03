@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@keyframes disappear {
+    to {
+        opacity: 0;
+        transform: translateY(-30%);
+    }
+}
+
+.disappear-animation {
+    animation: disappear 3s forwards;
+}

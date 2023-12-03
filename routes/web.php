@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\GameDenomController;
+use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
 
 require __DIR__ . '/auth.php';
@@ -21,6 +22,7 @@ Route::group(['middleware' => ['auth', 'isUser']], function () {
     Route::get('/', [GameController::class, 'map'])->middleware(['auth', 'verified'])->name('dashboard');
     Route::get('/dashboard', [GameController::class, 'map'])->middleware(['auth', 'verified'])->name('dashboard');
     Route::get('/games/{id}', [GameController::class, 'show'])->name('games.show');
+    Route::post('/transaction/add', [TransactionController::class, 'createTransaction'])->name('transaction.add');
 });
 
 //Admin

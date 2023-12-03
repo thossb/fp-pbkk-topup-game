@@ -11,18 +11,23 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('transaction', function (Blueprint $table) {
+        Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->string('description', 128)->nullable();
-            $table->string('payment_method', 128);
+            $table->string('username', 30);
+            $table->string('server', 30);
+            $table->string('phone_number', 20);
+            $table->string('status', 10);
+            $table->string('payment_method', 10);
             $table->string('payment_proof'); // Store the image file name
-            $table->timestamp('transaction_date');
 
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('user');
 
             $table->unsignedBigInteger('game_id');
             $table->foreign('game_id')->references('id')->on('games');
+
+            $table->unsignedBigInteger('denom_id');
+            $table->foreign('denom_id')->references('id')->on('game_denoms');
 
             $table->timestamps();
         });
