@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\OrderNotificationJob;
+use App\Models\Game;
+use App\Models\GameDenom;
 use App\Models\Transaction;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -13,20 +17,20 @@ class TransactionController extends Controller
     {
         $user = Auth::user();
         $pagination = 5;
-    
+
         $query = Transaction::with('denom', 'game')->where('user_id', $user->id);
-    
+
         // Sorting options
         $sortBy = $request->input('sort_by', 'id'); // Default sorting by ID
         $sortOrder = $request->input('sort_order', 'asc'); // Default sorting in ascending order
-    
+
         // Validate sorting parameters to prevent SQL injection
         $validSortColumns = ['id', 'username', 'server', 'phone_number', 'payment_method', 'status'];
         $sortBy = in_array($sortBy, $validSortColumns) ? $sortBy : 'id';
         $sortOrder = in_array($sortOrder, ['asc', 'desc']) ? $sortOrder : 'asc';
-    
+
         $transactions = $query->orderBy($sortBy, $sortOrder)->paginate($pagination);
-    
+
         return view('history', compact('transactions', 'sortBy', 'sortOrder'));
     }
 
@@ -37,19 +41,18 @@ class TransactionController extends Controller
 
     public function getAllTransactions()
     {
-        $showListTransactions = true;
         $transactions = Transaction::with('denom', 'game')
             ->orderBy('id') // You may want to adjust the ordering
             ->paginate(5);
 
-        return view('admin.panel', compact('transactions', 'showListTransactions'));
+        return view('admin.panel', compact('transactions'));
     }
 
     public function getTransactionsData()
     {
-        $transactions = Transaction::with('denom', 'game')
-            ->orderBy('id') // You may want to adjust the ordering
-            ->paginate(5);
+        $transactions = Transaction::with('denom', 'game', 'user')
+            ->orderBy('id')->get(); // You may want to adjust the ordering
+        // ->paginate(5);
 
         $html = view('admin.partials.get-transactions', compact('transactions'))->render();
 
@@ -101,19 +104,34 @@ class TransactionController extends Controller
         $newStatus = ($transaction->status == 'pending') ? 'succeed' : 'pending';
 
         // Update transaction attributes based on $validated data and new status
+        if ($newStatus == 'succeed') {
+            info('damnbruh');
+            $user = User::find($transaction->user_id);
+            if ($user) {
+                $email = $user->email;
+                $user_name = $user->name;
+                $game = Game::where('id', $transaction->game_id)->first();
+                $denom = GameDenom::where('id', $transaction->denom_id)->first();
+
+                OrderNotificationJob::dispatch($email, $user_name, $transaction->created_at, $transaction->id, $game->name, $game->unit, $denom->denom, $denom->price);
+            }
+        }
+
         $transaction->update([
             'status' => $newStatus
         ]);
 
+
+
         // Retrieve updated transactions list
         $transactions = Transaction::with('denom', 'game')
-            ->orderBy('id')
-            ->paginate(5);
+            ->orderBy('id')->get();
 
-        // Render the updated transactions list and return as JSON
+
         $html = view('admin.partials.get-transactions', compact('transactions'))->render();
 
         return response()->json(['html' => $html]);
+        // return view('admin.panel')->with('test');
     }
 
     public function rejectTransaction(Request $request, $id)
@@ -125,7 +143,7 @@ class TransactionController extends Controller
             'status' => 'required',
         ]);
         // Toggle status based on the current status
-        $newStatus = ($transaction->status == 'success' || $transaction->status == 'pending') ? 'failed' : 'success';
+        $newStatus = ($transaction->status == 'succeed' || $transaction->status == 'pending') ? 'failed' : 'succeed';
 
         // Update transaction attributes based on $validated data and new status
         $transaction->update([
@@ -134,8 +152,7 @@ class TransactionController extends Controller
 
         // Retrieve updated transactions list
         $transactions = Transaction::with('denom', 'game')
-            ->orderBy('id')
-            ->paginate(5);
+            ->orderBy('id')->get();
 
         // Render the updated transactions list and return as JSON
         $html = view('admin.partials.get-transactions', compact('transactions'))->render();
