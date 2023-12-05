@@ -17,7 +17,6 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             GameSeeder::class,
             TransactionSeeder::class,
-            // PaymentHistorySeeder::class,
             GameDenomSeeder::class,
         ]);
     }

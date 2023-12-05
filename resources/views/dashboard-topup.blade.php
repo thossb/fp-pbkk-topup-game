@@ -1,10 +1,26 @@
 <x-app-layout>
+  <x-slot name="header">
+    <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        {{ __('Dashboard') }}
+    </h2>
+</x-slot>
     <div class="flex flex-col gap-10">
-        <div class="mt-4 mx-20">
-            <x-bladewind.alert shade="dark" type="warning" show_close_icon="false">
-                Our website is still on-going development !
-            </x-bladewind.alert>
-        </div>
+      {{-- Flash Message Session --}}
+      @if (session('success'))
+          <div class="mx-20 mt-4 animate-out fade-out delay-300 disappear-animation">
+              <x-bladewind.alert shade="dark" type="success" show_close_icon="false">
+                  {{ session('success') }}
+              </x-bladewind.alert>
+          </div>
+      @else
+          <div class="mt-4 mx-20 animate-out fade-out delay-300 disappear-animation">
+              <x-bladewind.alert shade="dark" type="warning" show_close_icon="false">
+                  Our website is still on-going development!
+              </x-bladewind.alert>
+          </div>
+      @endif
+
+      
 
         <!-- Sliders -->
         <section class="">
@@ -27,6 +43,7 @@
                       src="https://source.unsplash.com/user/erondu/3000x900"
                       alt="image"
                     />
+                    <div class="swiper-lazy-preloader"></div>
                   </div>
                   <div class="swiper-slide">
                     <img
@@ -34,6 +51,7 @@
                       src="https://source.unsplash.com/collection/190727/3000x900"
                       alt="image"
                     />
+                    <div class="swiper-lazy-preloader"></div>
                   </div>
                   <div class="swiper-slide">
                     <img
@@ -41,6 +59,7 @@
                       src="https://source.unsplash.com/collection/190728/3000x900"
                       alt="image"
                     />
+                    <div class="swiper-lazy-preloader"></div>
                   </div>
                 </div>
                 <div class="swiper-button-next"></div>
@@ -62,6 +81,11 @@
                 },
                 mousewheel: true,
                 keyboard: true,
+                lazy: true,
+                lazy: {
+                    loadPrevNext: true,
+                },
+                preloadImages: false,
               });
             </script>
             @endpush
@@ -73,6 +97,9 @@
                 @foreach ($games as $game)
                     <x-game-card :game="$game" />
                 @endforeach
+            </div>
+            <div class="mt-10 bg-white p-4 rounded-md bg-opacity-60">
+              {{ $games->links() }}
             </div>
         </section>
 

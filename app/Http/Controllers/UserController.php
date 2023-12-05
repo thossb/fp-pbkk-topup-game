@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Ramsey\Uuid\Uuid;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use function Pest\Laravel\get;
 
 class UserController extends Controller
@@ -15,8 +16,8 @@ class UserController extends Controller
             'name' => 'required|string|max:100',
             'email' => 'required|email|unique:user|max:50',
             'role_id' => 'required|integer',
-            'password' => 'required|min:6', 
-            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', 
+            'password' => 'required|min:6',
+            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $user = new User([
@@ -27,7 +28,7 @@ class UserController extends Controller
         ]);
 
         if ($request->hasFile('profile_picture')) {
-            $fileName = time().$request->file('profile_picture')->getClientOriginalName();
+            $fileName = time() . $request->file('profile_picture')->getClientOriginalName();
             $path = $request->file('profile_picture')->storeAs('images', $fileName, 'public');
             $user->profile_picture = $path;
         }
@@ -42,7 +43,7 @@ class UserController extends Controller
     {
         $pagination = 6;
         $query = User::query();
-    
+
         if ($request->has('query')) {
             $search_text = $request->input('query');
             $query->where(function ($q) use ($search_text) {
@@ -50,7 +51,7 @@ class UserController extends Controller
                     ->orWhere('email', 'LIKE', "%$search_text%");
             });
         }
-    
+
         if ($request->has('sort_by')) {
             $sort_by = $request->input('sort_by');
             if ($sort_by === 'name_asc') {
@@ -61,9 +62,9 @@ class UserController extends Controller
         } else {
             $query->orderBy('name', 'asc');
         }
-    
+
         $user = $query->paginate($pagination);
-    
+
         return response()->json([
             'title' => 'User',
             'user' => $user,
@@ -78,7 +79,7 @@ class UserController extends Controller
         //     'sort_by' => $request->input('sort_by'),
         // ]);
     }
-    
+
     public function editUser($id)
     {
         $user = User::find($id);
@@ -121,7 +122,7 @@ class UserController extends Controller
         return response()->json(['message' => 'User updated successfully']);
         //return back()->with('status', 'User updated successfully');
     }
-    
+
     public function photoUpload(Request $request, $id)
     {
         $user = User::find($id);

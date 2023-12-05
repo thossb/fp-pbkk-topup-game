@@ -10,6 +10,6 @@ class TransactionSeeder extends Seeder
 {
     public function run()
     {
-        \App\Models\Transaction::factory(10)->create(); // Creates 10 transactions using the factory.
+        \App\Models\Transaction::factory(30)->create(); // Creates 10 transactions using the factory.
     }
 }

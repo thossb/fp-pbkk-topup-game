@@ -4,12 +4,15 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\GameDenomController;
+use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
+
 require __DIR__ . '/auth.php';
 
 //profile controller
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profile-inbox', [ProfileController::class, 'inbox'])->name('profile.inbox');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
@@ -19,10 +22,14 @@ Route::group(['middleware' => ['auth', 'isUser']], function () {
     Route::get('/', [GameController::class, 'map'])->middleware(['auth', 'verified'])->name('dashboard');
     Route::get('/dashboard', [GameController::class, 'map'])->middleware(['auth', 'verified'])->name('dashboard');
     Route::get('/games/{id}', [GameController::class, 'show'])->name('games.show');
+    Route::post('/transaction/add', [TransactionController::class, 'createTransaction'])->name('transaction.add');
 });
 
 //Admin
 Route::group(['middleware' => ['auth', 'isAdmin'], 'prefix' => 'admin'], function () {
+    //admin panel
+    Route::get('/admin', [TransactionController::class, 'getAllTransactions'])->name('admin');
+
 
     //manage user
     Route::get('/user', [UserController::class, 'getUserList']);    //->name('user.list');
@@ -47,3 +54,4 @@ Route::group(['middleware' => ['auth', 'isAdmin'], 'prefix' => 'admin'], functio
 Route::get('/games/{id}', [GameController::class, 'show'])->name('games.show');
 Route::get('/', [GameController::class, 'map'])->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('/dashboard', [GameController::class, 'map'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/history', [TransactionController::class, 'getMyTransactions'])->middleware(['auth', 'verified'])->name('history');

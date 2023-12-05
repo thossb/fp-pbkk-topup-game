@@ -10,18 +10,16 @@ class Transaction extends Model
     use HasFactory;
 
     protected $fillable = [
-        'description',
+        'username',
+        'server',
+        'phone_number',
         'payment_method',
         'payment_proof',
-        'transaction_date',
-        'user_id',
+        'status',
+        'denom_id',
         'game_id',
+        'user_id'
     ];
-
-    protected $table = 'transaction';
-    protected $primaryKey = 'id';
-    public $incrementing = true;
-    public $timestamps = true;
 
     // Define the relationships with the 'users' and 'games' tables if needed.
     public function user()
@@ -29,13 +27,13 @@ class Transaction extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public function denom()
+    {
+        return $this->belongsTo(GameDenom::class, 'denom_id');
+    }
+
     public function game()
     {
         return $this->belongsTo(Game::class, 'game_id');
-    }
-
-    public function payment_history()
-    {
-        return $this->hasOne(PaymentHistory::class, 'transaction_id');
     }
 }
