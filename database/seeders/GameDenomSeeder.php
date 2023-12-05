@@ -12,6 +12,6 @@ class GameDenomSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\GameDenom::factory(10)->create();
+        \App\Models\GameDenom::factory(50)->create();
     }
 }

@@ -31,30 +31,28 @@ Route::group(['middleware' => ['auth', 'isAdmin'], 'prefix' => 'admin'], functio
     Route::get('/', [TransactionController::class, 'getView'])->name('admin');
 
     //manage transactions
-    Route::get('/get-transactions', [TransactionController::class, 'getTransactionsData'])->name('admin.get-transactions');
+    Route::get('/get-transactions', [TransactionController::class, 'getTransactionsData'])->name('admin.get-transactions'); //have non crud filtered search
     Route::patch('/transactions/{id}', [TransactionController::class, 'updateTransaction'])->name('admin.update');
     Route::patch('/transactions/{id}', [TransactionController::class, 'rejectTransaction'])->name('admin.reject');
 
-
-
     //manage user
-    Route::get('/user', [UserController::class, 'getUserList']);    //->name('user.list');
-    Route::get('/edit-user/{id}', [UserController::class, 'editUser']); //->name('user.edit');
-    Route::patch('/edit-user/{id}', [UserController::class, 'updateUser']); //->name('user.update');
-    Route::patch('/photo-user/{id}', [UserController::class, 'photoUpload']);   //->name('picture.update');
-    Route::get('/delete-user/{id}', [UserController::class, 'deleteUser']); //->name('user.delete');
+    Route::get('/user', [UserController::class, 'getUserList'])->name('user.list');//have non crud filtered search
+    Route::get('/edit-user/{id}', [UserController::class, 'editUser'])->name('user.edit');
+    Route::patch('/edit-user/{id}', [UserController::class, 'updateUser'])->name('user.update');
+    Route::patch('/photo-user/{id}', [UserController::class, 'photoUpload'])->name('picture.update');
+    Route::get('/delete-user/{id}', [UserController::class, 'deleteUser'])->name('user.delete');
 
     //manage game
-    Route::post('/games/add', [GameController::class, 'addGame'])->name('game.add');    // Add a new game
-    Route::get('/games', [GameController::class, 'getGameList'])->name('game.list');    // Get the list of games
-    Route::put('/games/{id}/update', [GameController::class, 'updateGame'])->name('game.update');   // Update a game
-    Route::delete('/games/{id}/delete', [GameController::class, 'deleteGame'])->name('game.delete');    // Delete a game
+    Route::post('/games/add', [GameController::class, 'addGame'])->name('game.add');
+    Route::get('/games', [GameController::class, 'getGameList'])->name('game.list');// Get the list of games //have non crud filtered search
+    Route::put('/games/{id}/update', [GameController::class, 'updateGame'])->name('game.update');
+    Route::delete('/games/{id}/delete', [GameController::class, 'deleteGame'])->name('game.delete');
 
     //manage game denoms
-    Route::post('/game-denoms', [GameDenomController::class, 'addDenom']);  // Add new denom
-    Route::get('/game-denoms', [GameDenomController::class, 'getDenomList']);    // Get denom list
-    Route::put('/game-denoms/{id}', [GameDenomController::class, 'updateGameDenom']);    // Update game denom
-    Route::delete('/game-denoms/{id}', [GameDenomController::class, 'deleteGameDenom']);    // Delete game denom
+    Route::post('/game-denoms', [GameDenomController::class, 'addDenom']);
+    Route::get('/game-denoms', [GameDenomController::class, 'getDenomList']);
+    Route::put('/game-denoms/{id}', [GameDenomController::class, 'updateGameDenom']);
+    Route::delete('/game-denoms/{id}', [GameDenomController::class, 'deleteGameDenom']);
 });
 
 Route::get('/games/{id}', [GameController::class, 'show'])->name('games.show');

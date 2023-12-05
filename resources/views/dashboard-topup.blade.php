@@ -20,7 +20,7 @@
           </div>
       @endif
 
-      
+
 
         <!-- Sliders -->
         <section class="">

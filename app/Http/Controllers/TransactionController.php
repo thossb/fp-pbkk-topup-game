@@ -9,15 +9,25 @@ use Illuminate\Support\Facades\Storage;
 
 class TransactionController extends Controller
 {
-    public function getMyTransactions()
+    public function getMyTransactions(Request $request)
     {
-        if (Auth::check()) {
-            $user = Auth::user();
-            $transactions = Transaction::with('denom')->with('game')->where('user_id', $user->id)->paginate(5);
-        } else {
-            $transactions = collect();
-        }
-        return view('history', compact('transactions'));
+        $user = Auth::user();
+        $pagination = 5;
+    
+        $query = Transaction::with('denom', 'game')->where('user_id', $user->id);
+    
+        // Sorting options
+        $sortBy = $request->input('sort_by', 'id'); // Default sorting by ID
+        $sortOrder = $request->input('sort_order', 'asc'); // Default sorting in ascending order
+    
+        // Validate sorting parameters to prevent SQL injection
+        $validSortColumns = ['id', 'username', 'server', 'phone_number', 'payment_method', 'status'];
+        $sortBy = in_array($sortBy, $validSortColumns) ? $sortBy : 'id';
+        $sortOrder = in_array($sortOrder, ['asc', 'desc']) ? $sortOrder : 'asc';
+    
+        $transactions = $query->orderBy($sortBy, $sortOrder)->paginate($pagination);
+    
+        return view('history', compact('transactions', 'sortBy', 'sortOrder'));
     }
 
     public function getView()

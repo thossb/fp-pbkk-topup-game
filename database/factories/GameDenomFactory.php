@@ -16,6 +16,11 @@ class GameDenomFactory extends Factory
             '300',
             '400',
             '500',
+            '600',
+            '700',
+            '800',
+            '900',
+            '1000'
         ];
 
         $gameIdExamples = [
@@ -31,9 +36,11 @@ class GameDenomFactory extends Factory
             '10',
         ];
 
+        $randomDenom = Arr::random($denomExamples);
+        
         return [
-            'price' => $this->faker->numberBetween(10000, 1000000),
-            'denom' => Arr::random($denomExamples),
+            'denom' => $randomDenom,
+            'price' => (int)$randomDenom * 1000,
             'game_id' => Arr::random($gameIdExamples),
         ];
     }
