@@ -28,7 +28,13 @@ Route::group(['middleware' => ['auth', 'isUser']], function () {
 //Admin
 Route::group(['middleware' => ['auth', 'isAdmin'], 'prefix' => 'admin'], function () {
     //admin panel
-    Route::get('/admin', [TransactionController::class, 'getAllTransactions'])->name('admin');
+    Route::get('/', [TransactionController::class, 'getView'])->name('admin');
+
+    //manage transactions
+    Route::get('/get-transactions', [TransactionController::class, 'getTransactionsData'])->name('admin.get-transactions');
+    Route::patch('/transactions/{id}', [TransactionController::class, 'updateTransaction'])->name('admin.update');
+    Route::patch('/transactions/{id}', [TransactionController::class, 'rejectTransaction'])->name('admin.reject');
+
 
 
     //manage user

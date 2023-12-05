@@ -5,10 +5,9 @@
 @keyframes disappear {
     to {
         opacity: 0;
-        transform: translateY(-30%);
     }
 }
 
 .disappear-animation {
-    animation: disappear 3s forwards;
+    animation: disappear 2s forwards;
 }
