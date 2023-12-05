@@ -19,7 +19,11 @@ class TransactionFactory extends Factory
 
         $user = User::inRandomOrder()->first();
         $game = Game::inRandomOrder()->first();
-        $gameDenom = GameDenom::inRandomOrder()->first();
+        $gameDenom = GameDenom::where('game_id', $game->id)->inRandomOrder()->first();
+
+        if (!$gameDenom) {
+            $gameDenom = GameDenom::factory()->create(['game_id' => $game->id]);
+        }
 
         return [
             'username' => $this->faker->userName,
@@ -28,9 +32,9 @@ class TransactionFactory extends Factory
             'payment_method' => $this->faker->randomElement(['qris', 'gopay', 'dana', 'shopee', 'va']),
             'payment_proof' => $paymentProofPath,
             'status' => $this->faker->randomElement(['pending', 'succeed', 'failed']),
-            'denom_id' => $gameDenom->id ?? GameDenom::factory()->create()->id,
-            'game_id' => $game->id ?? Game::factory()->create()->id,
-            'user_id' => $user->id ?? User::factory()->create()->id,
+            'denom_id' => $gameDenom,
+            'game_id' => $game->id,
+            'user_id' => $user->id,
         ];
     }
 }

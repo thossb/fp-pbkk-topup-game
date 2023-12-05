@@ -20,13 +20,30 @@ class TransactionController extends Controller
         return view('history', compact('transactions'));
     }
 
+    public function getView()
+    {
+        return view('admin.panel');
+    }
+
     public function getAllTransactions()
+    {
+        $showListTransactions = true;
+        $transactions = Transaction::with('denom', 'game')
+            ->orderBy('id') // You may want to adjust the ordering
+            ->paginate(5);
+
+        return view('admin.panel', compact('transactions', 'showListTransactions'));
+    }
+
+    public function getTransactionsData()
     {
         $transactions = Transaction::with('denom', 'game')
             ->orderBy('id') // You may want to adjust the ordering
-            ->paginate(10);
+            ->paginate(5);
 
-        return view('admin.panel', compact('transactions'));
+        $html = view('admin.partials.get-transactions', compact('transactions'))->render();
+
+        return response()->json(['html' => $html]);
     }
 
     public function createTransaction(Request $request)
@@ -54,12 +71,65 @@ class TransactionController extends Controller
             'payment_proof' => $imagePath,
             'game_id' => $validated['game_id'],
             'denom_id' => $validated['denom_id'],
-            // 'game_id',
-            // 'denom_id',
             'status' => 'pending',
             'user_id' => $user->id
         ]);
         // dd($transaction);
         return redirect()->route('dashboard')->with('success', 'Your transaction has been posted. Please wait for confirmation.');
+    }
+
+    public function updateTransaction(Request $request, $id)
+    {
+        $transaction = Transaction::find($id);
+
+        // Validate other fields if needed
+        $validated = $request->validate([
+            'status' => 'required',
+        ]);
+
+        // Toggle status based on the current status
+        $newStatus = ($transaction->status == 'pending') ? 'succeed' : 'pending';
+
+        // Update transaction attributes based on $validated data and new status
+        $transaction->update([
+            'status' => $newStatus
+        ]);
+
+        // Retrieve updated transactions list
+        $transactions = Transaction::with('denom', 'game')
+            ->orderBy('id')
+            ->paginate(5);
+
+        // Render the updated transactions list and return as JSON
+        $html = view('admin.partials.get-transactions', compact('transactions'))->render();
+
+        return response()->json(['html' => $html]);
+    }
+
+    public function rejectTransaction(Request $request, $id)
+    {
+        $transaction = Transaction::find($id);
+
+        // Validate other fields if needed
+        $validated = $request->validate([
+            'status' => 'required',
+        ]);
+        // Toggle status based on the current status
+        $newStatus = ($transaction->status == 'success' || $transaction->status == 'pending') ? 'failed' : 'success';
+
+        // Update transaction attributes based on $validated data and new status
+        $transaction->update([
+            'status' => $newStatus
+        ]);
+
+        // Retrieve updated transactions list
+        $transactions = Transaction::with('denom', 'game')
+            ->orderBy('id')
+            ->paginate(5);
+
+        // Render the updated transactions list and return as JSON
+        $html = view('admin.partials.get-transactions', compact('transactions'))->render();
+
+        return response()->json(['html' => $html]);
     }
 }
