@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Models\Game;
+use App\Models\GameDenom;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -14,16 +15,22 @@ class TransactionFactory extends Factory
 
     public function definition()
     {
-        $paymentProofPath = 'payment-proof/' . Str::random(20) . '.png'; // Generate a random filename with a .png extension.
+        $paymentProofPath = 'payment-proof/' . Str::random(20) . '.png';
+
+        $user = User::inRandomOrder()->first();
+        $game = Game::inRandomOrder()->first();
+        $gameDenom = GameDenom::inRandomOrder()->first();
 
         return [
-            'description' => $this->faker->randomElement(['mantab gan', 'ditunggu', 'mantab diskon']),
-            'payment_method' => $this->faker->randomElement(['bank bca', 'bank mandiri', 'gopay', 'ovo']),
+            'username' => $this->faker->userName,
+            'server' => $this->faker->word,
+            'phone_number' => $this->faker->phoneNumber,
+            'payment_method' => $this->faker->randomElement(['qris', 'gopay', 'dana', 'shopee', 'va']),
             'payment_proof' => $paymentProofPath,
-            'transaction_date' => $this->faker->dateTime,
-            'user_id' => User::inRandomOrder()->first()->id,
-            'game_id' => Game::inRandomOrder()->first()->id,
+            'status' => $this->faker->randomElement(['pending', 'succeed', 'failed']),
+            'denom_id' => $gameDenom->id ?? GameDenom::factory()->create()->id,
+            'game_id' => $game->id ?? Game::factory()->create()->id,
+            'user_id' => $user->id ?? User::factory()->create()->id,
         ];
     }
 }
-

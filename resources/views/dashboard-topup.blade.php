@@ -1,4 +1,9 @@
 <x-app-layout>
+  <x-slot name="header">
+    <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        {{ __('Dashboard') }}
+    </h2>
+</x-slot>
     <div class="flex flex-col gap-10">
       {{-- Flash Message Session --}}
       @if (session('success'))
@@ -38,6 +43,7 @@
                       src="https://source.unsplash.com/user/erondu/3000x900"
                       alt="image"
                     />
+                    <div class="swiper-lazy-preloader"></div>
                   </div>
                   <div class="swiper-slide">
                     <img
@@ -45,6 +51,7 @@
                       src="https://source.unsplash.com/collection/190727/3000x900"
                       alt="image"
                     />
+                    <div class="swiper-lazy-preloader"></div>
                   </div>
                   <div class="swiper-slide">
                     <img
@@ -52,6 +59,7 @@
                       src="https://source.unsplash.com/collection/190728/3000x900"
                       alt="image"
                     />
+                    <div class="swiper-lazy-preloader"></div>
                   </div>
                 </div>
                 <div class="swiper-button-next"></div>
@@ -73,6 +81,11 @@
                 },
                 mousewheel: true,
                 keyboard: true,
+                lazy: true,
+                lazy: {
+                    loadPrevNext: true,
+                },
+                preloadImages: false,
               });
             </script>
             @endpush

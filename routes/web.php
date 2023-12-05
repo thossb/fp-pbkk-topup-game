@@ -27,6 +27,9 @@ Route::group(['middleware' => ['auth', 'isUser']], function () {
 
 //Admin
 Route::group(['middleware' => ['auth', 'isAdmin'], 'prefix' => 'admin'], function () {
+    //admin panel
+    Route::get('/admin', [TransactionController::class, 'getAllTransactions'])->name('admin');
+
 
     //manage user
     Route::get('/user', [UserController::class, 'getUserList']);    //->name('user.list');
@@ -51,3 +54,4 @@ Route::group(['middleware' => ['auth', 'isAdmin'], 'prefix' => 'admin'], functio
 Route::get('/games/{id}', [GameController::class, 'show'])->name('games.show');
 Route::get('/', [GameController::class, 'map'])->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('/dashboard', [GameController::class, 'map'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/history', [TransactionController::class, 'getMyTransactions'])->middleware(['auth', 'verified'])->name('history');

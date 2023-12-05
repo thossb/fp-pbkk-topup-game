@@ -9,9 +9,24 @@ use Illuminate\Support\Facades\Storage;
 
 class TransactionController extends Controller
 {
-    public function index()
+    public function getMyTransactions()
     {
-        $transactions = Transaction::all();
+        if (Auth::check()) {
+            $user = Auth::user();
+            $transactions = Transaction::with('denom')->with('game')->where('user_id', $user->id)->paginate(5);
+        } else {
+            $transactions = collect();
+        }
+        return view('history', compact('transactions'));
+    }
+
+    public function getAllTransactions()
+    {
+        $transactions = Transaction::with('denom', 'game')
+            ->orderBy('id') // You may want to adjust the ordering
+            ->paginate(10);
+
+        return view('admin.panel', compact('transactions'));
     }
 
     public function createTransaction(Request $request)

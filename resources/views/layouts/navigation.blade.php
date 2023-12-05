@@ -15,16 +15,14 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')">
+                    <x-nav-link :href="route('history')" :active="request()->routeIs('history')">
                         {{ __('History') }}
                     </x-nav-link>
-                </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')">
-                        {{ __('Admin') }}
-                    </x-nav-link>
+                    @if (Auth::check() && Auth::user()->role->name === 'admin')
+                        <x-nav-link :href="route('admin')" :active="request()->routeIs('admin')">
+                            {{ __('Admin') }}
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -84,6 +82,14 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('history')" :active="request()->routeIs('history')">
+                {{ __('History') }}
+            </x-responsive-nav-link>
+            @if (Auth::check() && Auth::user()->role->name === 'admin')
+            <x-responsive-nav-link :href="route('admin')" :active="request()->routeIs('admin')">
+                {{ __('Admin') }}
+            </x-responsive-nav-link>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->
@@ -94,6 +100,10 @@
             </div>
 
             <div class="mt-3 space-y-1">
+                <x-responsive-nav-link :href="route('profile.inbox')">
+                    {{ __('Inbox') }}
+                    <span class="bg-red-500 rounded-full px-2 py-1 text-white text-xs font-semibold ml-2">New</span>
+                </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('profile.edit')">
                     {{ __('Profile') }}
                 </x-responsive-nav-link>
